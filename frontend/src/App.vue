@@ -1,22 +1,21 @@
-<script setup>
-  import LoginForm from './components/LoginForm.vue';
+<script>
+  export default {
+    methods: {
+      goToLogin() {
+        this.$router.push('/login')
+      }
+    }
+  }
 </script>
 
 <template>
-  <div class="loginForm">
-      <LoginForm/>
+  <div>
+    <router-view></router-view>
+    <h1 v-if="$route.path === '/'">Добро пожаловать!</h1>
+    <button v-if="$route.path === '/' " @click="goToLogin">Войти</button>
   </div>
-  
 </template>
 
 <style scoped>
-  .loginForm {
-    background-color: #1F42AE;
-    width: 350px;
-    height: 500px;
-    border-radius: 20px;
-    position: relative;
-    left: 50%;
-    top: 15%;
-  }
+  
 </style>

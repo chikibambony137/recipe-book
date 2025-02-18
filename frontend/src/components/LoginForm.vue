@@ -6,28 +6,43 @@
             };
         },
         methods: {
-
+            goToHome() {
+                this.$router.push('/home')
+            }
         },
 }
 </script>
 
 <template>
-    <div>
-        <a class="toRegister"><u>Register ></u></a>
-        <img src="..\assets\logo.png" class="logo"/>
+    <div class="loginForm">
+        <div>
+            <a class="toRegister"><u>Register ></u></a>
+            <img src="..\assets\logo.png" class="logo"/>
+        </div>
+        <div>
+            <form>
+                <p><input type="login" class="login-input" placeholder="Login / Email" maxlength=37/></p>
+                <p><input type="password" class="login-input" placeholder="Password" maxlength=37/></p>
+                <p><button type="submit" class="login-button" @click="goToHome">Login</button></p>
+                <a class="forgotPassword" href="#/home"><u>Forgot password?</u></a>
+            </form>
+        </div>        
     </div>
-    <div>
-        <form>
-            <p><input type="login" class="login-input" placeholder="Login / Email" maxlength=37/></p>
-            <p><input type="password" class="login-input" placeholder="Password" maxlength=37/></p>
-            <p><button type="submit" class="login-button">Login</button></p>
-            <a class="forgotPassword"><u>Forgot password?</u></a>
-        </form>
-        
-    </div>
+
 </template>
 
-<style>
+<style scoped>
+
+.loginForm {
+    background-color: #1F42AE;
+    width: 350px;
+    height: 500px;
+    border-radius: 20px;
+    position: relative;
+    left: 50%;
+    top: 15%;
+  }
+
 .logo {
     width: 120px;
     height: 120px;
