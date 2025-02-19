@@ -22,7 +22,7 @@
         <div>
             <form>
                 <p><input type="login" class="login-input" placeholder="Login / Email" maxlength=37/></p>
-                <p><input type="password" class="login-input" placeholder="Password" maxlength=37/></p>
+                <p><input type="password" class="login-input" placeholder="Password" maxlength=47/></p>
                 <p><button type="submit" class="login-button" @click="goToHome">Login</button></p>
                 <a class="forgotPassword" href="#/home"><u>Forgot password?</u></a>
             </form>
