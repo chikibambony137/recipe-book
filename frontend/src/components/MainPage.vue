@@ -24,6 +24,8 @@
          <div class="recipe"></div>
          <div class="recipe"></div>
          <div class="recipe"></div> 
+         <div class="recipe"></div>
+         <div class="recipe"></div> 
          <div class="recipe"></div> 
       </div>
 
@@ -225,6 +227,7 @@ export default {
       line-height: 20px;
       letter-spacing: 0px;
       text-align: center;
+      cursor: pointer;
    }
 
    .add-recipe-bttn:hover {
@@ -253,21 +256,21 @@ export default {
 
    .recipe-list-div {
       box-sizing: border-box;
-      background-color: red;
       width: 100%;
-      height: 100%;
+      height: auto;
       padding: 20px;
       display: flex;
       flex-wrap: wrap;
+      justify-content: space-between;
    }
 
    .recipe {
       border-radius: 10px;
       background: rgb(25, 57, 156);
-      width: calc(50% - 10px);
-      height: 100px;
+      width: 47%;
+      height: 300px;
       position: relative;
-      margin: 5px;
+      margin: 10px;
    }
 
 </style>
