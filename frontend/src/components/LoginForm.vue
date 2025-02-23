@@ -8,7 +8,10 @@
         methods: {
             goToHome() {
                 this.$router.push('/home')
-            }
+            },
+            goToReg() {
+                this.$router.push('/registration')
+            },
         },
 }
 </script>
@@ -16,7 +19,7 @@
 <template>
     <div class="loginForm">
         <div>
-            <a class="toRegister"><u>Register ></u></a>
+            <a class="toRegister" @click="goToReg"><u>Register ></u></a>
             <img src="..\assets\logo.png" class="logo"/>
         </div>
         <div>

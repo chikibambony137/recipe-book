@@ -13,11 +13,9 @@
             <button class="search-bttn"></button>
          </div>
 
-         <button class="add-recipe-bttn">Добавить ⊕</button>
+         <button class="add-recipe-bttn">Добавить</button>
 
-         <div class="profile-div">
-            a
-         </div>
+         <div class="profile-div">a</div>
       </div>
 
       <div class="recipe-list-div">
