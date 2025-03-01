@@ -1,13 +1,24 @@
 <script>
+    import axios from 'axios';
+
     export default {
         data() {
             return {
-                LoginForm: ''
+                API_URL: 'http://localhost:8000',
+                user: null,
+                login: '',
+                password: ''
             };
         },
         methods: {
-            goToHome() {
-                this.$router.push('/home')
+            async Login() {
+                try {
+                    await axios.post(`${this.API_URL}/login?login=${this.login}&password=${this.password}`)
+                    this.$router.push('/home')
+                }
+                catch (error) {
+                    alert('Ошибка: ' + (error.response?.data?.detail || ''));
+                }
             },
             goToReg() {
                 this.$router.push('/registration')
@@ -23,10 +34,10 @@
             <img src="..\assets\logo.png" class="logo"/>
         </div>
         <div>
-            <form>
-                <p><input type="login" class="login-input" placeholder="Login / Email" maxlength=37/></p>
-                <p><input type="password" class="login-input" placeholder="Password" maxlength=47/></p>
-                <p><button type="submit" class="login-button" @click="goToHome">Login</button></p>
+            <form @submit.prevent="Login">
+                <p><input type="login" class="login-input" v-model="login" placeholder="Login / Email" maxlength=37/></p>
+                <p><input type="password" class="login-input" v-model="password" placeholder="Password" maxlength=47/></p>
+                <p><button type="submit" class="login-button" @click="Login">Login</button></p>
                 <a class="forgotPassword" href="/home"><u>Forgot password?</u></a>
             </form>
         </div>        

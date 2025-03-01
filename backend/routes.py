@@ -18,10 +18,11 @@ async def register(login: str, password: str, db: Session = Depends(get_db)):
 
 @router.post("/login")
 async def login(login: str, password: str, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.login == login).first()
-    if user.password == password:
-        return {"Успешный вход!": f"ID:{user.id}"}
-    else:
+    try:
+        user = db.query(User).filter(User.login == login).first()
+        if user.password == password:
+            return {"Успешный вход!": f"ID:{user.id}"}
+    except:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Неверный логин или пароль!")
