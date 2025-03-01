@@ -5,7 +5,6 @@
         data() {
             return {
                 API_URL: 'http://localhost:8000',
-                user: null,
                 login: '',
                 password: ''
             };
@@ -20,6 +19,7 @@
                     alert('Ошибка: ' + (error.response?.data?.detail || ''));
                 }
             },
+
             goToReg() {
                 this.$router.push('/registration')
             },
@@ -35,8 +35,8 @@
         </div>
         <div>
             <form @submit.prevent="Login">
-                <p><input type="login" class="login-input" v-model="login" placeholder="Login / Email" maxlength=37/></p>
-                <p><input type="password" class="login-input" v-model="password" placeholder="Password" maxlength=47/></p>
+                <p><input type="login" class="login-input" v-model="login" placeholder="Login / Email" maxlength=50/></p>
+                <p><input type="password" class="login-input" v-model="password" placeholder="Password" maxlength=50/></p>
                 <p><button type="submit" class="login-button" @click="Login">Login</button></p>
                 <a class="forgotPassword" href="/home"><u>Forgot password?</u></a>
             </form>
