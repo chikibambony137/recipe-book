@@ -22,6 +22,10 @@ async def login(login: str, password: str, db: Session = Depends(get_db)):
         user = db.query(User).filter(User.login == login).first()
         if user.password == password:
             return {"Успешный вход!": f"ID:{user.id}"}
+        else:
+            raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Неверный пароль!")
     except:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
