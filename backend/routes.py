@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from database import get_db
 from sqlalchemy.orm import Session
-from models import User
+from models import User, Recipe
+import schemas
 
 router = APIRouter()
 
@@ -30,3 +31,15 @@ async def login(login: str, password: str, db: Session = Depends(get_db)):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Неверный логин или пароль!")
+    
+@router.get("/recipes")
+async def get_recipes(db: Session = Depends(get_db)):
+    return db.query(Recipe).all()
+
+@router.post("/add_recipe")
+async def add_recipe(recipe: schemas.Recipe, db: Session = Depends(get_db)):
+    new_recipe = Recipe(**recipe.model_dump())
+    db.add(new_recipe)
+    db.commit()
+    db.refresh(new_recipe)
+    return {"msg": f"Рецепт \'{recipe.name}\' успешно добавлен!"}
