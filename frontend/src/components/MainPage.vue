@@ -1,74 +1,3 @@
-
-<script>
-export default {
-   data() {
-      return {
-         API_URL: 'http://localhost:8000',
-         isOpen: false,
-         recipes: [],
-         searchQuery: '',
-         isAddRecipeModalOpen: false,
-         newRecipeName: '',
-         newRecipeDescription: '',
-         newRecipeDifficulty: 1
-      }
-   },
-
-   methods: {
-      toggleMenu() {
-         this.isOpen = !this.isOpen;
-      },
-      
-      async fetchRecipes() {
-         const response = await fetch(`${this.API_URL}/recipes`);
-         if (!response.ok) {
-               throw new Error('Network response was not ok');
-            }
-         this.recipes = await response.json();
-      },
-
-      async addRecipe() {
-         const response = await fetch(`${this.API_URL}/add_recipe`, {
-            method: 'POST',
-            headers: {
-               'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-               name: this.newRecipeName,
-               description: this.newRecipeDescription,
-               difficulty: this.newRecipeDifficulty
-            })
-         });
-         const result = await response.json();
-         this.closeAddRecipeModal();
-         alert('Рецепт успешно добавлен!')
-         window.location.reload()
-      },
-      openAddRecipeModal() {
-         this.isAddRecipeModalOpen = true;
-         document.querySelector('.overlay').style.display = 'block';
-      },
-      closeAddRecipeModal() {
-         document.querySelector('.overlay').style.display = 'none';
-         this.isAddRecipeModalOpen = false;
-      },
-      searchRecipe() {
-         // Добавьте логику для поиска
-      }
-   },
-
-   mounted() {
-      this.fetchRecipes();
-   },
-
-   computed: {
-      filteredRecipes() {
-         return this.recipes.filter(recipe => recipe.name.includes(this.searchQuery));
-      }
-   }
-}
-</script>   
-
 <template>
    <div class="background">
       <div class="bar">
@@ -89,31 +18,47 @@ export default {
          <div class="profile-div">a</div>
       </div>
 
-      <div class="recipe-list-div">
-         <div v-for="recipe in recipes" :key="recipe.id" class="recipe">
-            <h3>{{ recipe.name }}</h3>
+      <RecipeList></RecipeList>
 
-            <label for="diff">Сложность:</label> 
-            <a>1</a><input type="range" step="1" min="0" max="10" :value=recipe.difficulty id="diff" disabled /><a>10</a>
-
-            <p>{{ recipe.description }}</p>
-            
-         </div>
-      </div>
-
-      <div class="overlay"></div>
-
-      <div v-if="isAddRecipeModalOpen"  class="add-recipe-modal">
-         <input v-model="newRecipeName" placeholder="Название"/>
-         <input v-model="newRecipeDescription" placeholder="Описание"/>
-         <input v-model="newRecipeDifficulty" type="number" placeholder="Сложность"/>
-         <button @click="addRecipe">Добавить рецепт</button>
-         <button @click="closeAddRecipeModal">Закрыть</button>
-      </div>
-
+      <AddRecipeForm v-if="isAddRecipeModalOpen"></AddRecipeForm>
 
    </div>
 </template>
+
+<script>
+import RecipeList from './recipeList.vue';
+import AddRecipeForm from './addRecipeForm.vue';
+
+export default {
+  components: { RecipeList, AddRecipeForm },
+   data() {
+      return {
+         isOpen: false,
+         isAddRecipeModalOpen: false,
+      }
+   },
+
+   methods: {
+      toggleMenu() {
+         this.isOpen = !this.isOpen;
+      },
+      
+      openAddRecipeModal() {
+         this.isAddRecipeModalOpen = true;
+      },
+
+      searchRecipe() {
+         // Добавьте логику для поиска
+      }
+   },
+
+   // computed: {
+   //    filteredRecipes() {
+   //       return this.recipes.filter(recipe => recipe.name.includes(this.searchQuery));
+   //    }
+   // }
+}
+</script>
 
 <style scoped>
    .background {
@@ -132,6 +77,7 @@ export default {
 
       border-radius: 20px;
       background: rgb(31, 66, 174);
+      z-index: 0;
    }
 
    .bar {
@@ -318,65 +264,6 @@ export default {
       text-align: center;
       align-content: center;
       text-transform: uppercase;
-   }
-
-   .recipe-list-div {
-      box-sizing: border-box;
-      width: 100%;
-      height: auto;
-      padding: 20px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      overflow: auto;
-      
-   }
-
-   .recipe {
-      border-radius: 10px;
-      background: rgb(25, 57, 156);
-      width: 47%;
-      height: 300px;
-      position: relative;
-      margin: 10px;
-
-      text-align: center;
-
-   }
-
-   .recipe h3, label, p, a {
-      color: rgb(219, 219, 219);
-   }
-
-   input[type="range"] {
-      appearance: none;
-      background-color: rgb(8, 194, 8);
-      border-radius: 10px;
-      cursor: pointer;
-      
-   }
-
-   .add-recipe-modal {
-      background: red;
-      width: 300px;
-      height: 300px;
-
-      position: fixed;
-      left: 41%;
-      top: 20%;
-      text-align: center;
-      z-index: 2;
-   }
-
-   .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5); /* Полупрозрачный черный цвет */
-      display: none; /* Скрыто по умолчанию */
-      z-index: 1; /* Размещаем ниже модального окна */
    }
 
 </style>

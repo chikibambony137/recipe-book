@@ -1,3 +1,21 @@
+<template>
+    <div class="loginForm">
+        <div>
+            <a class="toRegister" @click="goToReg"><u>Register ></u></a>
+            <img src="..\assets\logo.png" class="logo"/>
+        </div>
+        <div>
+            <form @submit.prevent="Login">
+                <p><input type="login" class="login-input" v-model="login" placeholder="Login / Email" maxlength=50/></p>
+                <p><input type="password" class="login-input" v-model="password" placeholder="Password" maxlength=50/></p>
+                <p><button type="submit" class="login-button">Login</button></p>
+                <a class="forgotPassword" href="/home"><u>Forgot password?</u></a>
+            </form>
+        </div>        
+    </div>
+
+</template>
+
 <script>
     import axios from 'axios';
 
@@ -30,24 +48,6 @@
         },
 }
 </script>
-
-<template>
-    <div class="loginForm">
-        <div>
-            <a class="toRegister" @click="goToReg"><u>Register ></u></a>
-            <img src="..\assets\logo.png" class="logo"/>
-        </div>
-        <div>
-            <form @submit.prevent="Login">
-                <p><input type="login" class="login-input" v-model="login" placeholder="Login / Email" maxlength=50/></p>
-                <p><input type="password" class="login-input" v-model="password" placeholder="Password" maxlength=50/></p>
-                <p><button type="submit" class="login-button">Login</button></p>
-                <a class="forgotPassword" href="/home"><u>Forgot password?</u></a>
-            </form>
-        </div>        
-    </div>
-
-</template>
 
 <style scoped>
 
