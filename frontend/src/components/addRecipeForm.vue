@@ -5,7 +5,7 @@
     <div v-if="isAddRecipeModalOpen"  class="add-recipe-modal">
         <h3>Добавить рецепт</h3>
 
-        <form style="text-align: right; padding-right: 20px; ;">
+        <form @submit.prevent="addRecipe" style="text-align: right; padding-right: 20px; ;">
             <label for="name">Название:</label>
             <input id="name" v-model="newRecipeName" 
              required placeholder="Название" 
@@ -21,7 +21,7 @@
              style="margin: 5px; width: 162px;"
              min="1" max="10" step="1"/>
 
-            <button type="submit" @submit="addRecipe" style="margin: 5px; margin-top: 20px;">Добавить рецепт</button>
+            <button type="submit" style="margin: 5px; margin-top: 20px;">Добавить рецепт</button>
             <button @click="closeAddRecipeModal" style="margin: 5px">Закрыть</button>  
 
         </form>
@@ -60,8 +60,8 @@ export default {
          });
          const result = await response.json();
          this.closeAddRecipeModal();
-         alert('Рецепт успешно добавлен!')
-         window.location.reload()
+         alert('Рецепт успешно добавлен!');
+         window.location.reload();
       },
 
       closeAddRecipeModal() {

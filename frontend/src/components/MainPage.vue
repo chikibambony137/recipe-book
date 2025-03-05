@@ -64,7 +64,7 @@ export default {
    .background {
       position: absolute;
       width: 762px;
-      height: 1020px;
+      height: 90%;
       left: 25%;
       top: 4%;
       display: flex;
@@ -83,7 +83,7 @@ export default {
    .bar {
       position: static;
       width: 100%;
-      height: 6.75%;
+      height: 11%;
       display: flex;
       order: 0;
       align-self: stretch;

@@ -42,7 +42,7 @@ export default {
     .recipe-list-div {
       box-sizing: border-box;
       width: 100%;
-      height: auto;
+      height: 100%;
       padding: 20px;
       display: flex;
       flex-wrap: wrap;

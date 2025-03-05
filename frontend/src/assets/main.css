@@ -4,7 +4,7 @@
   background-image: url(".\BG.png");
   background-color: #2148C0;
   background-attachment: fixed;
-
+  overflow: hidden;
 }
 
 #app {
