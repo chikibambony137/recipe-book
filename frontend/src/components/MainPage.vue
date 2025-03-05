@@ -18,7 +18,9 @@
          <div class="profile-div">a</div>
       </div>
 
-      <RecipeList></RecipeList>
+      <h3 v-if="isNotFound">По данному запросу ничего не найдено!</h3>
+      <RecipeList :recipes="recipes" />
+      
 
       <AddRecipeForm v-if="isAddRecipeModalOpen"></AddRecipeForm>
 
@@ -35,6 +37,10 @@ export default {
       return {
          isOpen: false,
          isAddRecipeModalOpen: false,
+         API_URL: 'http://localhost:8000',
+         recipes: [],
+         searchQuery: "",
+         isNotFound: false,
       }
    },
 
@@ -47,16 +53,36 @@ export default {
          this.isAddRecipeModalOpen = true;
       },
 
-      searchRecipe() {
-         // Добавьте логику для поиска
-      }
-   },
+      async fetchRecipes() {
+         const response = await fetch(`${this.API_URL}/recipes`);
+         if (!response.ok) {
+            throw new Error('Network response was not ok');
+         }
+         this.recipes = await response.json();
+      },
 
-   // computed: {
-   //    filteredRecipes() {
-   //       return this.recipes.filter(recipe => recipe.name.includes(this.searchQuery));
-   //    }
-   // }
+      async searchRecipe() {
+         const response = await fetch(`${this.API_URL}/recipe?search=${this.searchQuery}`);
+         if (!response.ok) {
+            throw new Error('Network response was not ok');
+         }
+         
+         this.recipes = await response.json();
+
+         if (this.recipes.length === 0)
+         {
+            this.isNotFound = true;
+         }
+         else {
+            this.isNotFound = false;
+         }
+         
+      },
+  },
+  
+  mounted() {
+    this.fetchRecipes();
+  }
 }
 </script>
 
@@ -264,6 +290,12 @@ export default {
       text-align: center;
       align-content: center;
       text-transform: uppercase;
+   }
+
+   h3 {
+      color: rgb(185, 185, 185);
+      font-family: 'Segoe UI';
+      
    }
 
 </style>

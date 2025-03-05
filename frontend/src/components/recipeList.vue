@@ -14,27 +14,9 @@
 
 <script>
 export default {
-    data() {
-        return {
-            API_URL: 'http://localhost:8000',
-            recipes: [],
-        }
-    },
-
-    methods: {
-        async fetchRecipes() {
-         const response = await fetch(`${this.API_URL}/recipes`);
-         if (!response.ok) {
-               throw new Error('Network response was not ok');
-            }
-         this.recipes = await response.json();
-      },
-    },
-    
-    mounted() {
-        this.fetchRecipes();
-    },
-
+  props: {
+    recipes: Array
+  }
 }
 </script>
 

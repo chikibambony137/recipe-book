@@ -43,3 +43,7 @@ async def add_recipe(recipe: schemas.Recipe, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_recipe)
     return {"msg": f"Рецепт \'{recipe.name}\' успешно добавлен!"}
+
+@router.get("/recipe")
+async def find_recipe_by_name(search: str, db: Session = Depends(get_db)):
+    return db.query(Recipe).where(Recipe.name.contains(search.lower().strip())).all()
