@@ -37,7 +37,7 @@ export default {
       return {
          isOpen: false,
          isAddRecipeModalOpen: false,
-         API_URL: 'http://localhost:8000',
+         API_URL: 'http://31.129.57.194/api',
          recipes: [],
          searchQuery: "",
          isNotFound: false,
