@@ -16,7 +16,7 @@ services:
   backend:
     build:
       context: ./backend
-    command: ["uvicorn", "main:app"]
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
     networks:
       - dev
     depends_on:
