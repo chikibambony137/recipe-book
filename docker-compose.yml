@@ -32,7 +32,7 @@ services:
     image: postgres:latest
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 0053
+      POSTGRES_PASSWORD: "0053"
       POSTGRES_DB: recipe-list
     networks:
       - dev
