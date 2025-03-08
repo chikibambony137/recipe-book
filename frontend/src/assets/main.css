@@ -2,7 +2,7 @@
 :root {
   background-size: cover;
   background-color: #2148C0;
-  background-image: url(".\BG.png");
+  background-image: url("BG.png");
   background-attachment: fixed;
   overflow: hidden;
 }
