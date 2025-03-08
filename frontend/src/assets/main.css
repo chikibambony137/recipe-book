@@ -1,8 +1,8 @@
 
 :root {
   background-size: cover;
-  background-image: url("frontend\src\assets\BG.png");
   background-color: #2148C0;
+  background-image: url(".\BG.png");
   background-attachment: fixed;
   overflow: hidden;
 }

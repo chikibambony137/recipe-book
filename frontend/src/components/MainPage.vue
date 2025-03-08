@@ -30,6 +30,7 @@
 <script>
 import RecipeList from './recipeList.vue';
 import AddRecipeForm from './addRecipeForm.vue';
+import Config from "./config.js"
 
 export default {
   components: { RecipeList, AddRecipeForm },
@@ -37,7 +38,7 @@ export default {
       return {
          isOpen: false,
          isAddRecipeModalOpen: false,
-         API_URL: 'http://31.129.57.194/api',
+         API_URL: Config.api,
          recipes: [],
          searchQuery: "",
          isNotFound: false,

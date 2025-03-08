@@ -36,11 +36,12 @@
 </template>
 
 <script>
+import Config from "./config.js"
 
 export default {
     data() {
         return {
-            API_URL: 'http://31.129.57.194/api',
+            API_URL: Config.api,
             isAddRecipeModalOpen: true,
             newRecipeName: '',
             newRecipeDescription: '',
