@@ -17,6 +17,6 @@ app.add_middleware(
 
 @app.get("/")
 async def main():
-    return {"Hello": "World!"}
+    return {"Welcome to": "Recipe-book API!"}
 
 app.include_router(router)
