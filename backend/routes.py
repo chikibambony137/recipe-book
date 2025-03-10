@@ -4,33 +4,43 @@ from sqlalchemy.orm import Session
 from models import User, Recipe
 import schemas
 
+from fastapi.security import OAuth2PasswordRequestForm
+from jwt import create_access_token, verify_token
+
 router = APIRouter()
+
 
 @router.get("/users")
 async def get_users(db: Session = Depends(get_db)):
     return db.query(User).all()
 
 @router.post("/register")
-async def register(user: schemas.User, db: Session = Depends(get_db)):
-    user = User(login=user.login, password=user.password)
+async def register(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+
+    user = User(login=form_data.username, password=form_data.password)
+    users = dict(db.query(User.id, User.login))
+
+    schemas.register_check(form_data.username, form_data.password, users)
+    user.set_password(form_data.password)
+
     db.add(user)
     db.commit()
     return {"msg": "Пользователь зарегистрирован!"}
 
 @router.post("/login")
-async def login(user: schemas.User, db: Session = Depends(get_db)):
-    try:
-        db_user = db.query(User).filter(User.login == user.login).first()
-        if db_user.password == user.password:
-            return {"Успешный вход!": f"ID:{db_user.id}"}
-        else:
-            raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Неверный пароль!")
-    except:
+async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+
+    user = db.query(User).filter(User.login == form_data.username).first()
+
+    if not user or not user.verify_password(form_data.password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Неверный логин или пароль!")
+            detail="Неверный логин или пароль!",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    access_token = create_access_token(data={"sub": user.login})
+    return {"access_token": access_token, "token_type": "bearer", "id": user.id}
     
 @router.get("/recipes")
 async def get_recipes(db: Session = Depends(get_db)):

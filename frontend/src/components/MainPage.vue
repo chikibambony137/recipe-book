@@ -55,10 +55,28 @@ export default {
       },
 
       async fetchRecipes() {
-         const response = await fetch(`${this.API_URL}/recipes`);
-         if (!response.ok) {
-            throw new Error('Network response was not ok');
+         // Получаем токен из localStorage
+         const token = localStorage.getItem('access_token');
+
+         // Если токена нет, перенаправляем пользователя для авторизации или уведомляем об этом
+         if (!token) {
+            alert('Авторизуйтесь');
+            this.$router.push('/login');
          }
+
+         const response = await fetch(`${this.API_URL}/recipes`);
+
+         if (response.status === 401) {
+                alert('Сессия истекла. Пожалуйста, авторизуйтесь заново');
+                localStorage.removeItem('access_token');
+                this.$router.push('/login');
+         }
+
+         if (!response.ok) {
+               const errorData = await response.json();
+               throw new Error(errorData.detail || 'Ошибка при отображении рецептов');
+         }
+
          this.recipes = await response.json();
       },
 

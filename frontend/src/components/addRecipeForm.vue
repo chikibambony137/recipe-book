@@ -51,6 +51,15 @@ export default {
 
     methods: {
         async addRecipe() {
+            // Получаем токен из localStorage
+            const token = localStorage.getItem('access_token');
+
+            // Если токена нет, перенаправляем пользователя для авторизации или уведомляем об этом
+            if (!token) {
+                alert('Авторизуйтесь');
+                this.$router.push('/login');
+            }
+
             const response = await fetch(`${this.API_URL}/add_recipe`, {
                 method: 'POST',
                 headers: {
@@ -62,6 +71,18 @@ export default {
                     difficulty: this.newRecipeDifficulty
                 })
                 });
+
+            if (response.status === 401) {
+                alert('Сессия истекла. Пожалуйста, авторизуйтесь заново');
+                localStorage.removeItem('access_token');
+                this.$router.push('/login');
+            }
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.detail || 'Ошибка при добавлении рецепта');
+            }
+
             const result = await response.json();
             this.closeAddRecipeModal();
             alert('Рецепт успешно добавлен!');

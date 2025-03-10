@@ -34,20 +34,29 @@
                 try {
                     const response = await fetch(`${this.API_URL}/login`, {
                         method: 'POST',
+                        body: new URLSearchParams({
+                            username: this.login,
+                            password: this.password,
+                        }).toString(),
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/x-www-form-urlencoded',
                         },
-                        body: JSON.stringify({
-                            login: this.login,
-                            password: this.password
-                        })
                     });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.detail || 'Ошибка при авторизации');
+                    }
+
                     const result = await response.json();
 
+                    // Сохранение токена в localStorage
+                    localStorage.setItem('access_token', result.access_token);
+
+                    // Перенаправление на домашнюю страницу
                     this.goToHome();
-                }
-                catch (error) {
-                    alert('Ошибка: ' + (error.response?.data?.detail || ''));
+                } catch (error) {
+                    alert('Ошибка: ' + error.message);
                 }
             },
 

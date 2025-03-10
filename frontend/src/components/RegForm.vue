@@ -1,5 +1,4 @@
 <script>
-    import axios from 'axios';
     import Config from "./config.js"
 
     export default {
@@ -17,15 +16,19 @@
                     if (this.password == this.password2){
                         const response = await fetch(`${this.API_URL}/register`, {
                             method: 'POST',
+                            body: new URLSearchParams({
+                                username: this.login,
+                                password: this.password,
+                            }).toString(),
                             headers: {
-                                'Content-Type': 'application/json'
+                                'Content-Type': 'application/x-www-form-urlencoded',
                             },
-                            body: JSON.stringify({
-                                login: this.login,
-                                password: this.password
-                            })
                         });
-                        const result = await response.json();
+
+                        if (!response.ok) {
+                            const errorData = await response.json();
+                            throw new Error(errorData.detail || 'Ошибка при авторизации');
+                        }
 
                         alert(`Пользователь "${this.login}" зарегистрирован`)
 
@@ -34,9 +37,8 @@
                     else {
                         alert('Пароли не совпадают!')
                     }
-                }
-                catch (error) {
-                    alert('Ошибка: ' + (error.response?.data?.detail || ''));
+                } catch (error) {
+                    alert('Ошибка: ' + error.message);
                 }
             },
 
