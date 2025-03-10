@@ -52,16 +52,16 @@ export default {
     methods: {
         async addRecipe() {
             const response = await fetch(`${this.API_URL}/add_recipe`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                name: this.newRecipeName,
-                description: this.newRecipeDescription,
-                difficulty: this.newRecipeDifficulty
-            })
-            });
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: this.newRecipeName,
+                    description: this.newRecipeDescription,
+                    difficulty: this.newRecipeDifficulty
+                })
+                });
             const result = await response.json();
             this.closeAddRecipeModal();
             alert('Рецепт успешно добавлен!');

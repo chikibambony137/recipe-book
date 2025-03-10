@@ -32,7 +32,18 @@
         methods: {
             async Login() {
                 try {
-                    await axios.post(`${this.API_URL}/login?login=${this.login}&password=${this.password}`);
+                    const response = await fetch(`${this.API_URL}/login`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            login: this.login,
+                            password: this.password
+                        })
+                    });
+                    const result = await response.json();
+
                     this.goToHome();
                 }
                 catch (error) {

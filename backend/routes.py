@@ -11,18 +11,18 @@ async def get_users(db: Session = Depends(get_db)):
     return db.query(User).all()
 
 @router.post("/register")
-async def register(login: str, password: str, db: Session = Depends(get_db)):
-    user = User(login=login, password=password)
+async def register(user: schemas.User, db: Session = Depends(get_db)):
+    user = User(login=user.login, password=user.password)
     db.add(user)
     db.commit()
     return {"msg": "Пользователь зарегистрирован!"}
 
 @router.post("/login")
-async def login(login: str, password: str, db: Session = Depends(get_db)):
+async def login(user: schemas.User, db: Session = Depends(get_db)):
     try:
-        user = db.query(User).filter(User.login == login).first()
-        if user.password == password:
-            return {"Успешный вход!": f"ID:{user.id}"}
+        db_user = db.query(User).filter(User.login == user.login).first()
+        if db_user.password == user.password:
+            return {"Успешный вход!": f"ID:{db_user.id}"}
         else:
             raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

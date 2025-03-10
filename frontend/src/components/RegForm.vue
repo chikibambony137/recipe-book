@@ -15,7 +15,20 @@
             async Register() {
                 try {
                     if (this.password == this.password2){
-                        await axios.post(`${this.API_URL}/register?login=${this.login}&password=${this.password}`)
+                        const response = await fetch(`${this.API_URL}/register`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                login: this.login,
+                                password: this.password
+                            })
+                        });
+                        const result = await response.json();
+
+                        alert(`Пользователь "${this.login}" зарегистрирован`)
+
                         this.$router.push('/login')
                     }
                     else {
