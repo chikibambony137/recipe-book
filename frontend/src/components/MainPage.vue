@@ -313,8 +313,7 @@
 
    h3 {
       color: rgb(185, 185, 185);
-      font-family: 'Segoe UI';
-      
+      font-family: 'Segoe UI'; 
    }
 
 </style>

@@ -51,4 +51,11 @@
       color: rgb(219, 219, 219);
     }
 
+    input[type="range"] {
+        appearance: none;
+        background-color: rgb(8, 194, 8);
+        border-radius: 10px;
+        cursor: pointer; 
+    }
+
 </style>
