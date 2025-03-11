@@ -28,84 +28,86 @@
 </template>
 
 <script>
-import RecipeList from './recipeList.vue';
-import AddRecipeForm from './addRecipeForm.vue';
-import Config from "./config.js"
+   import RecipeList from './recipeList.vue';
+   import AddRecipeForm from './addRecipeForm.vue';
+   import Config from "./config.js"
 
-export default {
-  components: { RecipeList, AddRecipeForm },
-   data() {
-      return {
-         isOpen: false,
-         isAddRecipeModalOpen: false,
-         API_URL: Config.api,
-         recipes: [],
-         searchQuery: "",
-         isNotFound: false,
+   export default {
+      components: { RecipeList, AddRecipeForm },
+
+      data() {
+         return {
+            isOpen: false,
+            isAddRecipeModalOpen: false,
+            API_URL: Config.api,
+            recipes: [],
+            searchQuery: "",
+            isNotFound: false,
+         }
+      },
+
+      methods: {
+         toggleMenu() {
+            this.isOpen = !this.isOpen;
+         },
+         
+         openAddRecipeModal() {
+            this.isAddRecipeModalOpen = true;
+         },
+
+         async fetchRecipes() {
+            // Получаем токен из localStorage
+            const token = localStorage.getItem('access_token');
+
+            // Если токена нет, перенаправляем пользователя для авторизации или уведомляем об этом
+            if (!token) {
+               alert('Авторизуйтесь');
+               this.$router.push('/login');
+            }
+
+            const response = await fetch(`${this.API_URL}/recipes`);
+
+            if (response.status === 401) {
+                  alert('Сессия истекла. Пожалуйста, авторизуйтесь заново');
+                  localStorage.removeItem('access_token');
+                  this.$router.push('/login');
+            }
+
+            if (!response.ok) {
+                  const errorData = await response.json();
+                  throw new Error(errorData.detail || 'Ошибка при отображении рецептов');
+            }
+
+            this.recipes = await response.json();
+         },
+
+         async searchRecipe() {
+            const response = await fetch(`${this.API_URL}/recipe?search=${this.searchQuery}`);
+            if (!response.ok) {
+               throw new Error('Network response was not ok');
+            }
+            
+            this.recipes = await response.json();
+
+            if (this.recipes.length === 0)
+            {
+               this.isNotFound = true;
+            }
+            else {
+               this.isNotFound = false;
+            }
+            
+         },
+      },
+
+      mounted() {
+         this.fetchRecipes();
       }
-   },
-
-   methods: {
-      toggleMenu() {
-         this.isOpen = !this.isOpen;
-      },
-      
-      openAddRecipeModal() {
-         this.isAddRecipeModalOpen = true;
-      },
-
-      async fetchRecipes() {
-         // Получаем токен из localStorage
-         const token = localStorage.getItem('access_token');
-
-         // Если токена нет, перенаправляем пользователя для авторизации или уведомляем об этом
-         if (!token) {
-            alert('Авторизуйтесь');
-            this.$router.push('/login');
-         }
-
-         const response = await fetch(`${this.API_URL}/recipes`);
-
-         if (response.status === 401) {
-                alert('Сессия истекла. Пожалуйста, авторизуйтесь заново');
-                localStorage.removeItem('access_token');
-                this.$router.push('/login');
-         }
-
-         if (!response.ok) {
-               const errorData = await response.json();
-               throw new Error(errorData.detail || 'Ошибка при отображении рецептов');
-         }
-
-         this.recipes = await response.json();
-      },
-
-      async searchRecipe() {
-         const response = await fetch(`${this.API_URL}/recipe?search=${this.searchQuery}`);
-         if (!response.ok) {
-            throw new Error('Network response was not ok');
-         }
-         
-         this.recipes = await response.json();
-
-         if (this.recipes.length === 0)
-         {
-            this.isNotFound = true;
-         }
-         else {
-            this.isNotFound = false;
-         }
-         
-      },
-  },
-  
-  mounted() {
-    this.fetchRecipes();
-  }
-}
+   }
 </script>
 
 <style scoped>
+
    .background {
       position: absolute;
       width: 762px;
@@ -166,7 +168,6 @@ export default {
       margin: 5px;
       background-color: white;
       transition: all 0.3s ease;
-      
    }
 
    .line.open:nth-child(1) {
@@ -191,7 +192,6 @@ export default {
 
       border-radius: 10px;
       background: rgb(255, 255, 255);
-
    }
 
    .search-input {

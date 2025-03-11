@@ -1,144 +1,143 @@
 <template>
-<div>
-    <div class="overlay"></div>
+    <div>
+        <div class="overlay"></div>
 
-    <div v-if="isAddRecipeModalOpen"  class="add-recipe-modal">
-        <h3>Добавить рецепт</h3>
+        <div v-if="isAddRecipeModalOpen"  class="add-recipe-modal">
+            <h3>Добавить рецепт</h3>
 
-        <form @submit.prevent="addRecipe" style="text-align: right; padding-right: 20px; ;">
-            <label for="name">Название:</label>
-            <input id="name" v-model="newRecipeName" 
-             required placeholder="Название" 
-             style="margin: 5px;"
-             autocomplete="off"/>
+            <form @submit.prevent="addRecipe" style="text-align: right; padding-right: 20px; ;">
+                <label for="name">Название:</label>
+                <input id="name" v-model="newRecipeName" 
+                required placeholder="Название" 
+                style="margin: 5px;"
+                autocomplete="off"/>
 
-            <label for="description">Описание:</label>
-            <input id="description" v-model="newRecipeDescription" 
-             required placeholder="Описание" 
-             style="margin: 5px"
-             autocomplete="off"/>
-            
-            <label for="diff">Сложность:</label>
-            <input id="diff" v-model="newRecipeDifficulty" type="number"
-             required placeholder="Сложность" 
-             style="margin: 5px; width: 162px;"
-             min="1" max="10" step="1"/>
+                <label for="description">Описание:</label>
+                <input id="description" v-model="newRecipeDescription" 
+                required placeholder="Описание" 
+                style="margin: 5px"
+                autocomplete="off"/>
+                
+                <label for="diff">Сложность:</label>
+                <input id="diff" v-model="newRecipeDifficulty" type="number"
+                required placeholder="Сложность" 
+                style="margin: 5px; width: 162px;"
+                min="1" max="10" step="1"/>
 
-            <button type="submit" style="margin: 5px; margin-top: 20px;">Добавить рецепт</button>
-            <button @click="closeAddRecipeModal" style="margin: 5px">Закрыть</button>  
+                <button type="submit" style="margin: 5px; margin-top: 20px;">Добавить рецепт</button>
+                <button @click="closeAddRecipeModal" style="margin: 5px">Закрыть</button>  
+            </form>
 
-        </form>
-
+        </div>
     </div>
-</div>
-
-
 </template>
 
 <script>
-import Config from "./config.js"
+    import Config from "./config.js"
 
-export default {
-    data() {
-        return {
-            API_URL: Config.api,
-            isAddRecipeModalOpen: true,
-            newRecipeName: '',
-            newRecipeDescription: '',
-            newRecipeDifficulty: 1
+    export default {
+        data() {
+            return {
+                API_URL: Config.api,
+                isAddRecipeModalOpen: true,
+                newRecipeName: '',
+                newRecipeDescription: '',
+                newRecipeDifficulty: 1
+            }
+        },
+
+        methods: {
+            async addRecipe() {
+                // Получаем токен из localStorage
+                const token = localStorage.getItem('access_token');
+
+                // Если токена нет, перенаправляем пользователя для авторизации или уведомляем об этом
+                if (!token) {
+                    alert('Авторизуйтесь');
+                    this.$router.push('/login');
+                }
+
+                const response = await fetch(`${this.API_URL}/add_recipe`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: this.newRecipeName,
+                        description: this.newRecipeDescription,
+                        difficulty: this.newRecipeDifficulty
+                    })
+                    });
+
+                if (response.status === 401) {
+                    alert('Сессия истекла. Пожалуйста, авторизуйтесь заново');
+                    localStorage.removeItem('access_token');
+                    this.$router.push('/login');
+                }
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Ошибка при добавлении рецепта');
+                }
+
+                const result = await response.json();
+                this.closeAddRecipeModal();
+                alert('Рецепт успешно добавлен!');
+                window.location.reload();
+            },
+
+            closeAddRecipeModal() {
+                document.querySelector('.overlay').style.display = 'none';
+                this.$parent.isAddRecipeModalOpen = false;
+            },
         }
-    },
-
-    methods: {
-        async addRecipe() {
-            // Получаем токен из localStorage
-            const token = localStorage.getItem('access_token');
-
-            // Если токена нет, перенаправляем пользователя для авторизации или уведомляем об этом
-            if (!token) {
-                alert('Авторизуйтесь');
-                this.$router.push('/login');
-            }
-
-            const response = await fetch(`${this.API_URL}/add_recipe`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: this.newRecipeName,
-                    description: this.newRecipeDescription,
-                    difficulty: this.newRecipeDifficulty
-                })
-                });
-
-            if (response.status === 401) {
-                alert('Сессия истекла. Пожалуйста, авторизуйтесь заново');
-                localStorage.removeItem('access_token');
-                this.$router.push('/login');
-            }
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.detail || 'Ошибка при добавлении рецепта');
-            }
-
-            const result = await response.json();
-            this.closeAddRecipeModal();
-            alert('Рецепт успешно добавлен!');
-            window.location.reload();
-        },
-
-        closeAddRecipeModal() {
-            document.querySelector('.overlay').style.display = 'none';
-            this.$parent.isAddRecipeModalOpen = false;
-        },
     }
-}
 </script>
 
-<style>
-input[type="range"] {
-    appearance: none;
-    background-color: rgb(8, 194, 8);
-    border-radius: 10px;
-    cursor: pointer;
-    
-}
+<style scoped>
 
-.add-recipe-modal {
-    background: rgb(41, 43, 167);
-    border-color: rgb(33, 35, 102);
+    input[type="range"] {
+        appearance: none;
+        background-color: rgb(8, 194, 8);
+        border-radius: 10px;
+        cursor: pointer;
+        
+    }
 
-    border-style: solid;
-    border-width: 3px;
-    border-radius: 10px;
+    .add-recipe-modal {
+        background: rgb(41, 43, 167);
+        border-color: rgb(33, 35, 102);
 
-    width: 300px;
-    height: 300px;
+        border-style: solid;
+        border-width: 3px;
+        border-radius: 10px;
 
-    position: fixed;
-    left: 41%;
-    top: 20%;
-    text-align: center;
-    z-index: 2;
-    padding: 5px;
-}
+        width: 300px;
+        height: 300px;
 
-.add-recipe-modal h3 {
-    color: rgb(211, 203, 203);
-}
+        position: fixed;
+        left: 41%;
+        top: 20%;
+        text-align: center;
+        z-index: 2;
+        padding: 5px;
+    }
 
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Полупрозрачный черный цвет */
-    display: none; /* Скрыто по умолчанию */
-    z-index: 1; /* Размещаем ниже модального окна */
+    .add-recipe-modal h3 {
+        color: rgb(211, 203, 203);
+    }
 
-    display: block;
-}
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5); /* Полупрозрачный черный цвет */
+        display: none; /* Скрыто по умолчанию */
+        z-index: 1; /* Размещаем ниже модального окна */
+
+        display: block;
+    }
+
 </style>

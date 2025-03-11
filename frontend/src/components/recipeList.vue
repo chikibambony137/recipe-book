@@ -13,14 +13,15 @@
 </template>
 
 <script>
-export default {
-  props: {
-    recipes: Array
-  }
-}
+    export default {
+      props: {
+        recipes: Array
+      }
+    }
 </script>
 
-<style>
+<style scoped>
+
     .recipe-list-div {
       box-sizing: border-box;
       width: 100%;
@@ -32,9 +33,9 @@ export default {
       overflow: auto;
       
       z-index: 1;
-   }
+    }
 
-   .recipe {
+    .recipe {
       border-radius: 10px;
       background: rgb(25, 57, 156);
       width: 47%;
@@ -44,9 +45,10 @@ export default {
 
       text-align: center;
 
-   }
+    }
 
-   .recipe h3, label, p, a {
+    .recipe h3, label, p, a {
       color: rgb(219, 219, 219);
-   }
+    }
+
 </style>

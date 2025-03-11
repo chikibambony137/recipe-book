@@ -13,11 +13,9 @@
             </form>
         </div>        
     </div>
-
 </template>
 
 <script>
-    import axios from 'axios';
     import Config from "./config.js"
 
     export default {
@@ -52,6 +50,7 @@
 
                     // Сохранение токена в localStorage
                     localStorage.setItem('access_token', result.access_token);
+                    localStorage.setItem('user_name', this.login); // надо добавить автора при добавлении рецепта
 
                     // Перенаправление на домашнюю страницу
                     this.goToHome();
@@ -68,103 +67,103 @@
                 this.$router.push('/home')
             }
         },
-}
+    }
 </script>
 
 <style scoped>
 
-.loginForm {
-    background-color: #1F42AE;
-    width: 350px;
-    height: 500px;
-    border-radius: 20px;
-    position: relative;
-    left: 50%;
-    top: 15%;
-  }
+    .loginForm {
+        background-color: #1F42AE;
+        width: 350px;
+        height: 500px;
+        border-radius: 20px;
+        position: relative;
+        left: 50%;
+        top: 15%;
+    }
 
-.logo {
-    width: 120px;
-    height: 120px;
-    position: relative;
-    left: 33%;
-    margin-top: 10%;
-    
-}
-.toRegister,
-.forgotPassword {
-    position: absolute;
-    color: rgb(255, 255, 255);
-    font-family: Montserrat;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 20px;
-    letter-spacing: 0px;
-    text-align: center;
-    text-decoration-line: underline;
-    opacity: 0.5;
-    cursor: pointer;
-    border-radius: 10px;
-}
+    .logo {
+        width: 120px;
+        height: 120px;
+        position: relative;
+        left: 33%;
+        margin-top: 10%;
+        
+    }
 
-.toRegister:active,
-.forgotPassword:active {
-    background-color: rgb(30, 208, 131);
-}
+    .toRegister,
+    .forgotPassword {
+        position: absolute;
+        color: rgb(255, 255, 255);
+        font-family: Montserrat;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 20px;
+        letter-spacing: 0px;
+        text-align: center;
+        text-decoration-line: underline;
+        opacity: 0.5;
+        cursor: pointer;
+        border-radius: 10px;
+    }
 
-.toRegister {
-    width: 80px;
-    height: 20px;
-    left: 256px;
-    top: 7px;
-}
+    .toRegister:active,
+    .forgotPassword:active {
+        background-color: rgb(30, 208, 131);
+    }
 
-.forgotPassword {
-    width: 146px;
-    height: 20px;
-    left: 179px;
-    top: 443px;
-}
+    .toRegister {
+        width: 80px;
+        height: 20px;
+        left: 256px;
+        top: 7px;
+    }
 
-.login-input {
-    position: relative;
-    width: 300px;
-    height: 44px;
-    left: 25px;
+    .forgotPassword {
+        width: 146px;
+        height: 20px;
+        left: 179px;
+        top: 443px;
+    }
 
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: flex-start;
-    gap: 19;
-    padding: 12px;
-    
-    box-sizing: border-box;
-    border: 1px solid rgb(255, 255, 255);
-    border-radius: 4px;
+    .login-input {
+        position: relative;
+        width: 300px;
+        height: 44px;
+        left: 25px;
 
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 19;
+        padding: 12px;
+        
+        box-sizing: border-box;
+        border: 1px solid rgb(255, 255, 255);
+        border-radius: 4px;
 
-    color: rgb(0, 0, 0);
-    font-family: Georgia;
-    font-size: 14px;
-    font-weight: 300;
-    line-height: 20px;
-    letter-spacing: 0px;
-    text-align: left;
-    padding-left: 5%;
-}
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 
-.login-button {
-    position: absolute;
-    width: 300px;
-    height: 45px;
-    left: 25px;
-    top: 387px;
-    border-radius: 4px;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.3);
-    background: rgb(255, 255, 255);
-}
+        color: rgb(0, 0, 0);
+        font-family: Georgia;
+        font-size: 14px;
+        font-weight: 300;
+        line-height: 20px;
+        letter-spacing: 0px;
+        text-align: left;
+        padding-left: 5%;
+    }
 
+    .login-button {
+        position: absolute;
+        width: 300px;
+        height: 45px;
+        left: 25px;
+        top: 387px;
+        border-radius: 4px;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.3);
+        background: rgb(255, 255, 255);
+    }
 
 </style>
